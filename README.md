@@ -38,3 +38,7 @@ It is useful to containers name shorten.
 | db | MySQL 5.6 container. provides MySQL datadir `/var/lib/mysql` |
 | web | Nginx container. references volumes from `concrete5` and `php`. |
 | php | PHP 7 fpm container. provides fpm socket `/var/run/php-fpm/php-fpm.sock` |
+
+## LICENSE
+
+The MIT License.
