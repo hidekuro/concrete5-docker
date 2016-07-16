@@ -34,7 +34,7 @@ It is useful to containers name shorten.
 
 | service name | description |
 |------|--------------|
-| concrete5 | data-volume-container of concrete5 sources. provides volume `/var/www/concrete5` |
+| c5 | data-volume-container of concrete5 sources. provides volume `/var/www/concrete5` |
 | db | MySQL 5.6 container. provides MySQL datadir `/var/lib/mysql` |
 | web | Nginx container. references volumes from `concrete5` and `php`. |
 | php | PHP 7 fpm container. provides fpm socket `/var/run/php-fpm/php-fpm.sock` |
