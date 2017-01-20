@@ -3,11 +3,8 @@ services:
   c5:
     build:
       context: "./c5"
-      args:
-        # used to http://www.concrete5.org/download_file/-/view/${CONCRETE5_REV}/
-        CONCRETE5_REV: "89071"
     volumes:
-      - "/var/www/concrete5"
+      - "c5src:/var/www/concrete5"
 
   web:
     build: "./web"
@@ -30,10 +27,15 @@ services:
       - "c5"
     volumes:
       - "/var/run/php-fpm"
+    working_dir: /var/www/concrete5
 
   db:
     build: "./db"
     volumes:
-      - "/var/lib/mysql"
+      - "c5db:/var/lib/mysql"
     environment:
       MYSQL_ROOT_PASSWORD: "mysql"
+
+volumes:
+  c5src:
+  c5db:
