@@ -19,7 +19,7 @@ Run containers using docker-compose
 
 ```bash
 cd c5
-docker-compose up -d
+docker-compose up --build -d
 ```
 
 Now, you can access to `http://your-docker-machine-ip/`
@@ -34,10 +34,17 @@ It is useful to containers name shorten.
 
 | service name | description |
 |------|--------------|
-| c5 | data-volume-container of concrete5 sources. provides volume `/var/www/concrete5` |
-| db | MySQL 5.6 container. provides MySQL datadir `/var/lib/mysql` |
-| web | Nginx container. references volumes from `concrete5` and `php`. |
-| php | PHP 7 fpm container. provides fpm socket `/var/run/php-fpm/php-fpm.sock` |
+| app | provides `/var/run/php-fpm/php-fpm.sock` and Concrete5 sources in `/var/www/concrete5`. |
+| db | MySQL 5.6 service. provides MySQL datadir `/var/lib/mysql` |
+| web | Nginx service. |
+
+## Remove ALL Services and Volumes
+
+```bash
+docker-compose down
+docker rmi c5_app c5_db c5_web
+docker volume rm $(docker volume ls -qf dangling=true)
+```
 
 ## LICENSE
 
