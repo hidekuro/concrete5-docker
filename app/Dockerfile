@@ -6,9 +6,6 @@ ARG AGENT_UID=1000
 RUN adduser -D -H -s /bin/sh -u ${AGENT_UID} c5agent
 
 # setup php
-COPY ./php/php.ini /usr/local/etc/php/php.ini
-COPY ./php-fpm/www.conf /usr/local/etc/php-fpm.d/zzz-www.conf
-
 RUN apk --no-cache add \
   curl-dev \
   libmcrypt-dev \
@@ -45,6 +42,10 @@ RUN mkdir -p /var/www \
   && mv /var/www/concrete* /var/www/concrete5 \
   && chown -R c5agent:c5agent /var/www/concrete5 \
   && chmod -R 700 /var/www/concrete5
+
+# put config
+COPY ./php/php.ini /usr/local/etc/php/php.ini
+COPY ./php-fpm/www.conf /usr/local/etc/php-fpm.d/zzz-www.conf
 
 VOLUME ["/var/run/php-fpm"]
 VOLUME ["/var/www/concrete5"]
