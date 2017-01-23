@@ -1,40 +1,32 @@
 version: "2"
+
 services:
-  c5:
-    build:
-      context: "./c5"
+  app:
+    build: ./app
     volumes:
-      - "c5src:/var/www/concrete5"
-
-  web:
-    build: "./web"
-    depends_on:
-      - "php"
-    volumes_from:
-      - "c5"
-      - "php"
-    ports:
-      - "80:80"
-      - "443:443"
-    environment:
-      SERVER_NAME: "192.168.99.100"
-      PHP_SOCKET: "/var/run/php-fpm/php-fpm.sock"
-    command: /bin/bash -c "envsubst '$$SERVER_NAME $$PHP_SOCKET' < /etc/nginx/conf.d/concrete5.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
-
-  php:
-    build: "./php"
-    volumes_from:
-      - "c5"
-    volumes:
-      - "/var/run/php-fpm"
+      - /var/run/php-fpm
+      - c5src:/var/www/concrete5
+    user: c5agent
     working_dir: /var/www/concrete5
 
-  db:
-    build: "./db"
-    volumes:
-      - "c5db:/var/lib/mysql"
+  web:
+    build: ./web
+    volumes_from:
+      - app
+    ports:
+      - 80:80
+      - 443:443
     environment:
-      MYSQL_ROOT_PASSWORD: "mysql"
+      SERVER_NAME: 192.168.99.100
+      PHP_SOCKET: /var/run/php-fpm/php-fpm.sock
+    command: sh -c "envsubst '$$SERVER_NAME $$PHP_SOCKET' < /etc/nginx/conf.d/concrete5.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+
+  db:
+    build: ./db
+    volumes:
+      - c5db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
 
 volumes:
   c5src:
